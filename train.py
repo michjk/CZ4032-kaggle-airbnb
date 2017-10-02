@@ -1,6 +1,8 @@
 import numpy as np 
 import xgboost as xgb 
 import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import Imputer
 
 #dataset path
 dataset_folder_path = "../dataset/"
@@ -9,6 +11,7 @@ test_path = dataset_folder_path + "test_users.csv"
 
 #column names
 country_destination_name = 'country_destination'
+country_name = 'country'
 id_name = 'id'
 date_first_booking_name = "date_first_booking"
 date_account_created_name = "date_account_created"
@@ -23,12 +26,10 @@ first_affiliate_tracked_name = 'first_affiliate_tracked'
 signup_app_name = 'signup_app'
 first_device_type_name = 'first_device_type'
 first_browser_name = 'first_browser'
+age_name = 'age'
 
-#nominal attribute
 nominal_column_list = [gender_name, signup_method_name, signup_flow_name, language_name, affiliate_channel_name, affiliate_provider_name, first_affiliate_tracked_name, signup_app_name, first_device_type_name, first_browser_name]
-
-#date attribute to be separated
-date_column = [date_account_created_name, timestamp_first_active_name]
+#nominal attribute
 
 #load dataset into dataframe
 df_train = pd.read_csv(train_path)
@@ -46,8 +47,6 @@ df_complete = df_complete.drop([id_name, date_first_booking_name], axis=1)
 
 # fill NA with -1
 df_complete = df_complete.fillna(-1)
-
-print(df_complete.info())
 
 # Feature Engineering
 # Separate timestamp_first_active
@@ -69,5 +68,39 @@ for f in nominal_column_list:
     df_complete_dummy = pd.get_dummies(df_complete[f], prefix=f)
     df_complete = df_complete.drop([f], axis=1)
     df_complete = pd.concat((df_complete, df_complete_dummy), axis=1)
+
+age_col = df_complete[age_name].values
+age_col = age_col.reshape((1,-1))
+imputer = Imputer(missing_values=-1, strategy="mean", axis=1)
+age_col = imputer.fit_transform(age_col)
+age_col = age_col.reshape((-1,))
+
+df_complete[age_name] = age_col
+
+print(df_complete[age_name].values)
+
+#separate data
+label_encoder = LabelEncoder()
+values = df_complete.values
+x_train = values[:train_size]
+y_train = label_encoder.fit_transform(label_train)
+x_test = values[train_size:]
+
+#train
+clf = xgb.XGBClassifier(max_depth=6, learning_rate=0.1, n_estimators=100, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
+clf.fit(x_train, y_train)
+y_pred = clf.predict_proba(x_test)
+
+id_out = []
+label_out = []
+for i in range(len(x_test)):
+    user_id = id_test[i]
+    id_out += [user_id]*5
+    sorted_args_pos = np.argsort(y_pred[i])[::-1]
+    label_name_pred = label_encoder.inverse_transform(sorted_args_pos)
+    label_out += label_name_pred[:5].tolist()
+
+submission = pd.DataFrame(np.column_stack((id_out, label_out)), columns=[id_name, country_name])
+submission.to_csv("sub.csv", index=False)
 
 
