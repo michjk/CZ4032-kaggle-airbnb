@@ -35,9 +35,9 @@ nominal_column_list = [gender_name, signup_method_name, signup_flow_name, langua
 df_train = pd.read_csv(train_path)
 df_test = pd.read_csv(test_path)
 label_train = df_train[country_destination_name].values
+df_train = df_train.drop([country_destination_name], axis=1)
 
 # concat dataset into a dataframe
-df_train = df_train.drop([country_destination_name], axis=1)
 id_test = df_test[id_name].values #id for test
 train_size = df_train.shape[0] #for separeting train and test
 df_complete = pd.concat((df_train, df_test), axis=0)
@@ -87,7 +87,7 @@ y_train = label_encoder.fit_transform(label_train)
 x_test = values[train_size:]
 
 #train
-clf = xgb.XGBClassifier(max_depth=6, learning_rate=0.1, n_estimators=100, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
+clf = xgb.XGBClassifier(max_depth=6, learning_rate=0.01, n_estimators=100, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
 clf.fit(x_train, y_train)
 y_pred = clf.predict_proba(x_test)
 
@@ -102,5 +102,3 @@ for i in range(len(x_test)):
 
 submission = pd.DataFrame(np.column_stack((id_out, label_out)), columns=[id_name, country_name])
 submission.to_csv("sub.csv", index=False)
-
-
