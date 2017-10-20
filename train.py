@@ -1,6 +1,7 @@
 import numpy as np 
 import xgboost as xgb 
 import pandas as pd
+import time
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import Imputer
 
@@ -87,8 +88,10 @@ y_train = label_encoder.fit_transform(label_train)
 x_test = values[train_size:]
 
 #train
-clf = xgb.XGBClassifier(max_depth=6, learning_rate=0.01, n_estimators=100, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
+clf = xgb.XGBClassifier(max_depth=6, learning_rate=0.1, n_estimators=100, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
+t = time.time()
 clf.fit(x_train, y_train)
+print("Training time %lf"%(time.time()-t))
 y_pred = clf.predict_proba(x_test)
 
 id_out = []
