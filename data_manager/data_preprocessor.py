@@ -58,4 +58,4 @@ def load_preprocessed_data(train_path, test_path):
     y_train = label_encoder.fit_transform(label_train)
     x_test = values[train_size:]
 
-    return x_train, y_train, x_test
+    return x_train, y_train, x_test, id_test, label_encoder
