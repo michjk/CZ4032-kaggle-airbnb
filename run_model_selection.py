@@ -16,12 +16,13 @@ output_path = "submission.csv"
 n_splits = 5
 n_estimators = [50, 100, 150, 200]
 max_depth = [2, 4, 6, 8]
-param_grid = dict(max_depth=max_depth, n_estimators=n_estimators)
+learning_rates = [0.0001, 0.001, 0.01, 0.1, 0.2, 0.3]
+param_grid = dict(learning_rate=learning_rates)
 
 x_train, y_train, x_test, id_test, label_encoder = load_preprocessed_data(train_path, test_path)
 
 #train
-model = xgb.XGBClassifier(max_depth=7, learning_rate=0.01, n_estimators=100, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
+model = xgb.XGBClassifier(max_depth=8, n_estimators=200, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
 
 t = time.time()
 kfold = StratifiedKFold(n_splits = n_splits, shuffle=True, random_state=0)
