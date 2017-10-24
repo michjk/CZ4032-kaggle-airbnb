@@ -23,9 +23,11 @@ x_train, y_train, x_test, id_test, label_encoder = load_preprocessed_data(train_
 #train
 model = xgb.XGBClassifier(max_depth=7, learning_rate=0.01, n_estimators=100, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
 
+t = time.time()
 kfold = StratifiedKFold(n_splits = n_splits, shuffle=True, random_state=0)
 grid_search = GridSearchCV(model, param_grid, scoring='neg_log_loss', n_jobs=-1, cv=kfold, verbose=10)
-grid_result = grid_search.fit(x_train, x_test)
+grid_result = grid_search.fit(x_train, y_train)
+print("Learning time: %.2f"%(time.time()-t))
 
 # summarize results
 print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
