@@ -44,18 +44,22 @@ def load_preprocessed_data(train_path, test_path):
         df_complete = df_complete.drop([f], axis=1)
         df_complete = pd.concat((df_complete, df_complete_dummy), axis=1)
 
+    '''
     age_col = df_complete[age_name].values
     age_col = age_col.reshape((1,-1))
     imputer = Imputer(missing_values=-1, strategy="mean", axis=1)
     age_col = imputer.fit_transform(age_col)
     age_col = age_col.reshape((-1,))
     df_complete[age_name] = age_col
-
+    '''
     #separate data
     label_encoder = LabelEncoder()
     values = df_complete.values
     x_train = values[:train_size]
     y_train = label_encoder.fit_transform(label_train)
     x_test = values[train_size:]
+
+    print("y train 1:")
+    print(y_train[0])
 
     return x_train, y_train, x_test, id_test, label_encoder

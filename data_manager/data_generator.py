@@ -19,3 +19,9 @@ def create_kaggle_submission_csv(y_pred, id_test, label_encoder, file_path, num_
 
     submission = pd.DataFrame(np.column_stack((id_out, label_out)), columns=[id_name, country_name])
     submission.to_csv(file_path, index=False)
+
+def create_data_exclude_NDF(train_path, new_train_path):
+    df_train = pd.read_csv(train_path)
+    df_train = df_train[df_train[country_destination_name] != 'NDF']
+    df_train.to_csv(new_train_path)
+
