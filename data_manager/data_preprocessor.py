@@ -44,7 +44,7 @@ def load_preprocessed_data(train_path, test_path):
         df_complete = df_complete.drop([f], axis=1)
         df_complete = pd.concat((df_complete, df_complete_dummy), axis=1)
 
-    '''
+    '''     
     age_col = df_complete[age_name].values
     age_col = age_col.reshape((1,-1))
     imputer = Imputer(missing_values=-1, strategy="mean", axis=1)

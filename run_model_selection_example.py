@@ -10,7 +10,7 @@ from sklearn.model_selection import GridSearchCV
 
 #dataset path
 dataset_folder_path = "../dataset/"
-train_path = dataset_folder_path + "train_users_exclude_NDF.csv"
+train_path = dataset_folder_path + "train_users_2_NDF_vs_non_NDF.csv"
 test_path = dataset_folder_path + "test_users.csv"
 output_path = "submission.csv"
 n_splits = 5
