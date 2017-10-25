@@ -2,6 +2,7 @@ import numpy as np
 import xgboost as xgb 
 import pandas as pd
 import time
+import os
 from data_manager.data_preprocessor import load_preprocessed_data
 from data_manager.data_generator import create_kaggle_submission_csv
 from sklearn.model_selection import cross_val_score
@@ -9,10 +10,11 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import GridSearchCV
 
 #dataset path
-dataset_folder_path = "../dataset/"
-train_path = dataset_folder_path + "train_users_exclude_NDF.csv"
-test_path = dataset_folder_path + "test_users.csv"
-output_path = "submission.csv"
+base_path = os.path.dirname(__file__)
+dataset_folder_path = "dataset/"
+train_path = base_path + dataset_folder_path + "train_users_2.csv"
+test_path = base_path + dataset_folder_path + "test_users.csv"
+output_path = base_path + "submission.csv"
 n_splits = 5
 n_estimators = [50, 100, 150, 200]
 max_depth = [2, 4, 6, 8]

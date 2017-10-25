@@ -1,22 +1,24 @@
 import numpy as np 
-import xgboost as xgb 
 import pandas as pd
 import time
+import os
 from data_manager.data_preprocessor import load_preprocessed_data
 from data_manager.data_generator import create_kaggle_submission_csv
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score
 
 #dataset path
-dataset_folder_path = "../dataset/"
-train_path = dataset_folder_path + "train_users_2.csv"
-test_path = dataset_folder_path + "test_users.csv"
-output_path = "submission.csv"
+base_path = os.path.dirname(__file__)
+dataset_folder_path = "dataset/"
+train_path = base_path + dataset_folder_path + "train_users_2.csv"
+test_path = base_path + dataset_folder_path + "test_users.csv"
+output_path = base_path + "submission_randomforest.csv"
 cv = 5
 
 x_train, y_train, x_test, id_test, label_encoder = load_preprocessed_data(train_path, test_path)
 
 #train
-clf = xgb.XGBClassifier(max_depth=6, learning_rate=0.08, n_estimators=25, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
+clf = RandomForestClassifier(n_estimators=100, n_jobs=2, min_samples_leaf=3)
 t = time.time()
 scores = cross_val_score(clf, x_train, y_train, cv = cv)
 print(scores.mean())
