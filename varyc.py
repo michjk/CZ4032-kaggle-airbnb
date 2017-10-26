@@ -152,7 +152,7 @@ for i in C_param_range:
     clf = LogisticRegression(penalty='l2', C=i, random_state=0)
 
     # Saving accuracy score in table
-    score = cross_val_score(clf, x_train, y_train, cv=5)
+    score = cross_val_score(clf, x_train_std, y_train, cv=5)
     print("For C = %.3f , the accuracy is : %0.2f (+/- %0.2f)" % (i, score.mean(), score.std() * 2))
 
     cur_score = score.mean() - score.std() * 2
