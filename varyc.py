@@ -153,15 +153,16 @@ for i in C_param_range:
 
     # Saving accuracy score in table
     score = cross_val_score(clf, x_train_std, y_train, cv=5)
-    print("For C = %.3f , the accuracy is : %0.2f (+/- %0.2f)" % (i, score.mean(), score.std() * 2))
+    print("For C = %.3f with scaled data, the accuracy is : %0.2f (+/- %0.2f)" % (i, score.mean(), score.std() * 2))
 
-    cur_score = score.mean() - score.std() * 2
+    cur_score = score.mean()
     if cur_score > best_score:
         best_score = cur_score
         best_c = i
 
 
 # Train logistic regression model with best C
+print("Best accuracy found with C = %.3f" % best_c)
 clf_final = LogisticRegression(penalty='l2', C=best_c, random_state=0)
 clf_final.fit(x_train_std, y_train)
 
