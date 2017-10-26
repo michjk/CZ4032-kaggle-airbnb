@@ -1,9 +1,57 @@
-import numpy as np 
-import xgboost as xgb 
+import numpy as np
 import pandas as pd
-from sklearn import linear_model
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import Imputer
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_score
+from sklearn.preprocessing import StandardScaler
+
+import matplotlib as plt
+
+from matplotlib.colors import ListedColormap
+
+
+def plot_decision_regions(X, y, classifier, test_idx=None, resolution=0.02):
+    # Initialise the marker types and colors
+    markers = ('s', 'x', 'o', '^', 'v')
+    colors = ('red', 'blue', 'lightgreen', 'gray', 'cyan')
+    color_Map = ListedColormap(colors[:len(np.unique(y))])  # we take the color mapping correspoding to the
+    # amount of classes in the target data
+
+    # Parameters for the graph and decision surface
+    x1_min = X[:, 0].min() - 1
+    x1_max = X[:, 0].max() + 1
+    x2_min = X[:, 1].min() - 1
+    x2_max = X[:, 1].max() + 1
+    xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution),
+                           np.arange(x2_min, x2_max, resolution))
+
+    Z = classifier.predict(np.array([xx1.ravel(), xx2.ravel()]).T)
+    Z = Z.reshape(xx1.shape)
+
+    plt.contour(xx1, xx2, Z, alpha=0.4, cmap=color_Map)
+    plt.xlim(xx1.min(), xx1.max())
+    plt.ylim(xx2.min(), xx2.max())
+
+    # Plot samples
+    X_test, Y_test = X[test_idx, :], y[test_idx]
+
+    for idx, cl in enumerate(np.unique(y)):
+        plt.scatter(x=X[y == cl, 0], y=X[y == cl, 1],
+                    alpha=0.8, c=color_Map(idx),
+                    marker=markers[idx], label=cl
+                    )
+
+def train_validate_split(df, train_percent=.6, seed=None):
+    np.random.seed(seed)
+    perm = np.random.permutation(df.index)
+    m = len(df)
+    train_end = int(train_percent * m)
+    train = df.ix[perm[:train_end]]
+    validate = df.ix[perm[train_end:]]
+    return train, validate
+
+C_param_range = [0.001,0.01,0.1,1,10,100]
 
 #dataset path
 dataset_folder_path = "dataset/"
@@ -80,6 +128,7 @@ df_complete[age_name] = age_col
 
 print(df_complete[age_name].values)
 
+
 #separate data
 label_encoder = LabelEncoder()
 values = df_complete.values
@@ -87,11 +136,37 @@ x_train = values[:train_size]
 y_train = label_encoder.fit_transform(label_train)
 x_test = values[train_size:]
 
-#train
-# clf = xgb.XGBClassifier(max_depth=6, learning_rate=0.01, n_estimators=100, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
-clf = linear_model.LinearRegression()
-clf.fit(x_train, y_train)
-y_pred = clf.predict_proba(x_test)
+
+## Scale
+sc = StandardScaler()
+x_train_std = sc.fit_transform(x_train)
+x_test_std = sc.transform(x_test)
+
+
+best_c = -1
+best_score = -1
+
+
+for i in C_param_range:
+    # Apply logistic regression model to training data
+    clf = LogisticRegression(penalty='l2', C=i, random_state=0)
+
+    # Saving accuracy score in table
+    score = cross_val_score(clf, x_train, y_train, cv=5)
+    print("For C = %.3f , the accuracy is : %0.2f (+/- %0.2f)" % (i, score.mean(), score.std() * 2))
+
+    cur_score = score.mean() - score.std() * 2
+    if cur_score > best_score:
+        best_score = cur_score
+        best_c = i
+
+
+# Train logistic regression model with best C
+clf_final = LogisticRegression(penalty='l2', C=best_c, random_state=0)
+clf_final.fit(x_train_std, y_train)
+
+# Predict using model
+y_pred = clf_final.predict_proba(x_test_std)
 
 id_out = []
 label_out = []
