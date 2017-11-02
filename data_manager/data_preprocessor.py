@@ -59,7 +59,16 @@ def load_preprocessed_data(train_path, test_path):
     y_train = label_encoder.fit_transform(label_train)
     x_test = values[train_size:]
 
-    print("y train 1:")
-    print(y_train[0])
-
     return x_train, y_train, x_test, id_test, label_encoder
+
+def createHybridLabelEncoder(label_encoder_1, label_encoder_2):
+    class_1= np.asarray([label_encoder_1.classes_[0]])
+    print(class_1)
+    class_2 = np.asarray(label_encoder_2.classes_)
+    print(class_2)
+    all_class = np.concatenate([class_1, class_2])
+
+    label_encoder = LabelEncoder()
+    label_encoder.fit(all_class)
+
+    return label_encoder
