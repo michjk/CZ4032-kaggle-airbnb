@@ -1,5 +1,5 @@
 import xgboost as xgb 
-from data_manager.data_collector import load_preprocessed_data
+from data_manager.data_preprocessor import load_preprocessed_data
 
 def initializeDefaultParams():
     params = {}
@@ -37,7 +37,7 @@ best_params = None
 for max_depth, min_child_weight in gridsearch_params:
     print("CV with max_depth={}, min_child_weight={}".format(max_depth, min_child_weight))
 
-    params = initializeDefaultParams()
+    params = initializeDefaultParamsGPU()
 
     params['max_depth'] = max_depth
     params['min_child_weight'] = min_child_weight
