@@ -10,7 +10,7 @@ def initializeDefaultParams():
 
 def initializeDefaultParamsGPU():
     params = initializeDefaultParams()
-    params['tree_method'] = 'gpu_exact'
+    params['tree_method'] = 'gpu_hist'
     return params
 
 dataset_folder_path = "../dataset/"
