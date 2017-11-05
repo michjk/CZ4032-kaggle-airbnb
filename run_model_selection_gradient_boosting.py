@@ -62,7 +62,7 @@ for max_depth, min_child_weight in gridsearch_params:
         best_params = (max_depth,min_child_weight)
 
  '''
-
+''' 
 list_eta = [0.0001, 0.001, 0.01, 0.1, 0.2, 0.3]
 min_mlogloss= float("Inf")
 best_params = None
@@ -92,5 +92,39 @@ for eta in list_eta:
     if mean_mlogloss < min_mlogloss:
         min_mlogloss = mean_mlogloss
         best_params = eta
+
+print("Best params: {}, mlogloss: {}".format(best_params, min_mlogloss))
+'''
+
+n_estimators = [25, 50, 100, 150, 200, 250]
+min_mlogloss= float("Inf")
+best_params = None
+
+for n in n_estimators:
+    print("CV with eta={}".format(n))
+
+    params = initializeDefaultParamsGPU()
+
+    params['max_depth'] = 5
+    params['min_child_weight'] = 9
+    params['eta'] = 0.2
+
+    cv_results = xgb.cv(
+        params,
+        train_dmat,
+        num_boost_round=n,
+        seed=seed,
+        nfold=nfold,
+        metrics=metrics,
+        early_stopping_rounds=25
+    )
+
+    # Update best score
+    mean_mlogloss = cv_results['test-mlogloss-mean'].min()
+    boost_rounds = cv_results['test-mlogloss-mean'].argmin()
+    print("\tmlogloss {} for {} rounds\n".format(mean_mlogloss, boost_rounds))
+    if mean_mlogloss < min_mlogloss:
+        min_mlogloss = mean_mlogloss
+        best_params = n 
 
 print("Best params: {}, mlogloss: {}".format(best_params, min_mlogloss))
