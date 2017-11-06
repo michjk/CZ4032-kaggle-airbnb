@@ -43,6 +43,8 @@ def load_preprocessed_data(train_path, test_path):
         df_complete_dummy = pd.get_dummies(df_complete[f], prefix=f)
         df_complete = df_complete.drop([f], axis=1)
         df_complete = pd.concat((df_complete, df_complete_dummy), axis=1)
+    
+    df_complete[age_name] = df_complete[age_name].apply(lambda x: -1 if x < 13 or x > 120 else x)
 
     '''     
     age_col = df_complete[age_name].values
