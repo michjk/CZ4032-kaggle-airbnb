@@ -26,8 +26,8 @@ def load_preprocessed_data(train_path, test_path, session = False):
     df_complete = df_complete.drop([id_name, date_first_booking_name], axis=1)
     print("drop complete")
 
-    # fill NA with -1
-    df_complete = df_complete.fillna(-1)
+    # fill NA with 0
+    df_complete = df_complete.fillna(0)
     
     # Feature Engineering
     # Separate timestamp_first_active
@@ -51,7 +51,7 @@ def load_preprocessed_data(train_path, test_path, session = False):
         df_complete = df_complete.drop([f], axis=1)
         df_complete = pd.concat((df_complete, df_complete_dummy), axis=1)
     
-    df_complete[age_name] = df_complete[age_name].apply(lambda x: -1 if x < 13 or x > 120 else x)
+    df_complete[age_name] = df_complete[age_name].apply(lambda x: 0 if x < 13 or x > 120 else x)
 
     '''     
     age_col = df_complete[age_name].values
