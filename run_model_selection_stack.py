@@ -92,124 +92,21 @@ gridsearch_params = [
 
 t = time.time()
 
-min_mlogloss = float("Inf")
-best_params = None
-#search for max depth and min_child_weight
-for max_depth, min_child_weight in gridsearch_params:
-    print("CV with max_depth={}, min_child_weight={}".format(max_depth, min_child_weight))
-
-    params['max_depth'] = max_depth
-    params['min_child_weight'] = min_child_weight
-
-    cv_result = xgb.cv(
-        params,
-        train_dmat,
-        num_boost_round=num_boost_round_default,
-        seed=seed,
-        nfold=nfold,
-        metrics=metrics,
-        early_stopping_rounds=20
-    )
-
-    mean_mlogloss = cv_result['test-mlogloss-mean'].min()
-    boost_rounds = cv_result['test-mlogloss-mean'].argmin()
-    print("\tMAE {} for {} rounds".format(mean_mlogloss, boost_rounds))
-    if mean_mlogloss < min_mlogloss:
-        min_mlogloss = mean_mlogloss
-        best_params = (max_depth,min_child_weight)
-
-print("Best params: {}, mlogloss: {}".format(best_params, min_mlogloss))
-max_depth = best_params[0]
-min_child_weight = best_params[1]
-
-params['max_depth'] = max_depth
-params['min_child_weight'] = min_child_weight
-
-gridsearch_params = [
-    (subsample, colsample)
-    for subsample in [i/10. for i in range(7,11)]
-    for colsample in [i/10. for i in range(7,11)]
-]
-
-min_mlogloss= float("Inf")
-best_params = None
-for subsample, colsample in gridsearch_params:
-    print("CV with subsample={}, colsample={}".format(subsample,colsample))
-
-    params['subsample'] = subsample
-    params['colsample_bytree'] = colsample
-
-    cv_results = xgb.cv(
-        params,
-        train_dmat,
-        num_boost_round=num_boost_round_default,
-        seed=seed,
-        nfold=nfold,
-        metrics=metrics,
-        early_stopping_rounds=20
-    )
-
-    # Update best score
-    mean_mlogloss = cv_results['test-mlogloss-mean'].min()
-    boost_rounds = cv_results['test-mlogloss-mean'].argmin()
-    print("\tmlogloss {} for {} rounds\n".format(mean_mlogloss, boost_rounds))
-    if mean_mlogloss < min_mlogloss:
-        min_mlogloss = mean_mlogloss
-        best_params = (subsample, colsample)
-
-print("Best params: {}, mlogloss: {}".format(best_params, min_mlogloss))
-
-subsample = best_params[0]
-colsample = best_params[1]
-params['subsample'] = subsample
-params['colsample_bytree'] = colsample
-
-#search eta
-list_eta = [0.0001, 0.001, 0.01, 0.1, 0.2, 0.3]
-min_mlogloss= float("Inf")
-best_params = None
-
-for eta in list_eta:
-    print("CV with eta={}".format(eta))
-
-    params['eta'] = eta
-
-    cv_results = xgb.cv(
-        params,
-        train_dmat,
-        num_boost_round=num_boost_round_default,
-        seed=seed,
-        nfold=nfold,
-        metrics=metrics,
-        early_stopping_rounds=20
-    )
-
-    # Update best score
-    mean_mlogloss = cv_results['test-mlogloss-mean'].min()
-    boost_rounds = cv_results['test-mlogloss-mean'].argmin()
-    print("\tmlogloss {} for {} rounds\n".format(mean_mlogloss, boost_rounds))
-    if mean_mlogloss < min_mlogloss:
-        min_mlogloss = mean_mlogloss
-        best_params = eta
-
-print("Best params: {}, mlogloss: {}".format(best_params, min_mlogloss))
-
-eta = best_params
-params['eta'] = eta
-
 n_estimators = [25, 50, 100, 150, 200, 250]
 min_mlogloss= float("Inf")
 best_params = None
 
+params = initializeDefaultParams()
+
+params['max_depth'] = 2
+params['min_child_weight'] = 5
+params['subsample'] = 0.8
+params['colsample_bytree'] = 1.0
+params['eta'] = 0.1  
+
 #search n estimator
 for n in n_estimators:
-    print("CV with eta={}".format(n))
-
-    params = initializeDefaultParams()
-
-    params['max_depth'] = max_depth
-    params['min_child_weight'] = min_child_weight
-    params['eta'] = eta
+    print("CV with n_estimator={}".format(n))
 
     cv_results = xgb.cv(
         params,
