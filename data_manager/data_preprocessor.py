@@ -4,25 +4,31 @@ import pandas as pd
 import numpy as np
 from data_constants import *
 
-def load_preprocessed_data(train_path, test_path):
+def load_preprocessed_data(train_path, test_path, session = False):
     
     #load dataset into dataframe
+    print("read train")
     df_train = pd.read_csv(train_path)
+    print("read test")
     df_test = pd.read_csv(test_path)
     label_train = df_train[country_destination_name].values
     df_train = df_train.drop([country_destination_name], axis=1)
 
+    print("concat")
     # concat dataset into a dataframe
     id_test = df_test[id_name].values #id for test
     train_size = df_train.shape[0] #for separeting train and test
     df_complete = pd.concat((df_train, df_test), axis=0)
+    print("concat complete")
 
+    print("drop unnecessary")
     # drop unnecessary column
     df_complete = df_complete.drop([id_name, date_first_booking_name], axis=1)
+    print("drop complete")
 
     # fill NA with -1
     df_complete = df_complete.fillna(-1)
-
+    
     # Feature Engineering
     # Separate timestamp_first_active
     tfa = np.vstack(df_complete.timestamp_first_active.astype(str).apply(lambda x: list(map(int, [x[:4],x[4:6],x[6:8],x[8:10],x[10:12],x[12:14]]))).values)
@@ -38,6 +44,7 @@ def load_preprocessed_data(train_path, test_path):
     df_complete[date_account_created_name+'_day'] = dac[:,2]
     df_complete = df_complete.drop([date_account_created_name], axis=1)
 
+    nominal_column_list = nominal_train_column_list if not session else nominal_train_session_column_list
     #create one hot encoding
     for f in nominal_column_list:
         df_complete_dummy = pd.get_dummies(df_complete[f], prefix=f)
