@@ -24,5 +24,5 @@ secs_elapsed_name = 'secs_elapsed'
 
 #nominal attribute
 nominal_train_column_list = [gender_name, signup_method_name, signup_flow_name, language_name, affiliate_channel_name, affiliate_provider_name, first_affiliate_tracked_name, signup_app_name, first_device_type_name, first_browser_name]
-nominal_session_column_list = [action_name, action_type_name, action_detail_name, device_type_name, secs_elapsed_name]
+nominal_session_column_list = [action_name, action_type_name, action_detail_name, device_type_name]
 nominal_train_session_column_list = nominal_train_column_list + nominal_session_column_list
