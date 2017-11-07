@@ -96,7 +96,7 @@ n_estimators = [25, 50, 100, 150, 200, 250]
 min_mlogloss= float("Inf")
 best_params = None
 
-params = initializeDefaultParams()
+params = initializeDefaultParamsGPU()
 
 params['max_depth'] = 2
 params['min_child_weight'] = 5
