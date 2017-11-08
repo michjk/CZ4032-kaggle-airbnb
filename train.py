@@ -19,7 +19,7 @@ print("Finish data preprocessing")
 
 #train
 print("Initiating RandomForestClassifier")
-clf = RandomForestClassifier(n_estimators=500, n_jobs=-1, min_samples_leaf=3)
+clf = RandomForestClassifier(n_estimators=1000, n_jobs=-1, min_samples_leaf=10, max_features=20)
 t = time.time()
 print("Starting CV")
 scores = cross_val_score(clf, x_train, y_train, cv=cv, scoring='accuracy', verbose=10)
