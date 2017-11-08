@@ -70,6 +70,30 @@ def load_preprocessed_data(train_path, test_path, session = False):
 
     return x_train, y_train, x_test, id_test, label_encoder
 
+def load_direct_preprocessed_data(train_path, test_path):
+    print("read train")
+    df_train = pd.read_csv(train_path)
+    print("read test")
+    df_test = pd.read_csv(test_path)
+
+    label_train = df_train[country_destination_name].values
+    df_train = df_train.drop([country_destination_name], axis=1)
+
+    id_test = df_test[id_name].values #id for test
+
+    print("drop unnecessary")
+    # drop unnecessary column
+    df_train = df_train.drop([id_name], axis=1)
+    df_test = df_test.drop([id_name], axis=1)
+    print("drop complete")
+
+    label_encoder = LabelEncoder()
+    x_train = df_train.values
+    y_train = label_encoder.fit_transform(label_train)
+    x_test = df_test.values
+
+    return x_train, y_train, x_test, id_test, label_encoder
+
 def createHybridLabelEncoder(label_encoder_1, label_encoder_2):
     class_1= np.asarray([label_encoder_1.classes_[0]])
     print(class_1)
