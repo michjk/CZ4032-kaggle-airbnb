@@ -28,8 +28,12 @@ def load_preprocessed_data(train_path, test_path, session = False):
 
     # fill NA with 0
     df_complete = df_complete.fillna(0)
-    
+
     # Feature Engineering
+    # Replace first_browser < 100 with 0
+    first_browser_freq = df_complete[first_browser_name].value_counts()
+    df_complete[first_browser_name] = df_complete[first_browser_name].apply(lambda x: 0 if first_browser_freq[x] < 50 else x)
+
     # Separate timestamp_first_active
     tfa = np.vstack(df_complete.timestamp_first_active.astype(str).apply(lambda x: list(map(int, [x[:4],x[4:6],x[6:8],x[8:10],x[10:12],x[12:14]]))).values)
     df_complete[timestamp_first_active_name+'_year'] = tfa[:,0]
@@ -51,6 +55,7 @@ def load_preprocessed_data(train_path, test_path, session = False):
         df_complete = df_complete.drop([f], axis=1)
         df_complete = pd.concat((df_complete, df_complete_dummy), axis=1)
     
+    #filter age
     df_complete[age_name] = df_complete[age_name].apply(lambda x: 0 if x < 13 or x > 120 else x)
 
     '''     
