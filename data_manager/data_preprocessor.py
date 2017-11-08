@@ -82,14 +82,13 @@ def load_direct_preprocessed_data(train_path, test_path):
     df_test = pd.read_csv(test_path)
 
     label_train = df_train[country_destination_name].values
-    df_train = df_train.drop([country_destination_name, date_first_booking_name], axis=1)
 
     id_test = df_test[id_name].values #id for test
 
     print("drop unnecessary")
     # drop unnecessary column
-    df_train = df_train.drop([id_name], axis=1)
-    df_test = df_test.drop([id_name], axis=1)
+    df_train = df_train.drop([id_name, country_destination_name], axis=1)
+    df_test = df_test.drop([id_name, country_destination_name], axis=1)
     print("drop complete")
 
     label_encoder = LabelEncoder()
