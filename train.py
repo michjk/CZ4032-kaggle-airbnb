@@ -16,12 +16,15 @@ cv = 5
 x_train, y_train, x_test, id_test, label_encoder = load_preprocessed_data(train_path, test_path)
 
 #train
-clf = xgb.XGBClassifier(max_depth=6, learning_rate=0.08, n_estimators=25, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
+clf = xgb.XGBClassifier(max_depth=6, learning_rate=0.1, n_estimators=100, objective="multi:softprob", subsample=0.5, colsample_bytree=0.5, seed=0)
 t = time.time()
 scores = cross_val_score(clf, x_train, y_train, cv = cv)
 print(scores.mean())
-print("Training time %lf"%(time.time()-t))
+print("Validation time %lf"%(time.time()-t))
+
+t = time.time()
 clf.fit(x_train, y_train)
+print("Training time %lf"%(time.time()-t))
 y_pred = clf.predict_proba(x_test)
 
 create_kaggle_submission_csv(y_pred, id_test, label_encoder, output_path)
