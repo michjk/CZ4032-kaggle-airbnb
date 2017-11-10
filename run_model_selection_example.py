@@ -28,7 +28,7 @@ x_train, y_train, x_test, id_test, label_encoder = load_preprocessed_data(train_
 model = xgb.XGBClassifier(max_depth=5, learning_rate=0.1, n_estimators=250, objective="multi:softprob", subsample=0.8, colsample_bytree=0.8, seed=0)
 
 #tune max_depth and min child weight
-param_grid = dict(max_depth = max_depth, min_child_weight = min_child_weight)
+param_grid = dict(max_depth = max_depth, min_child_weight = min_child_weight, early_stopping_rounds=25)
 t = time.time()
 kfold = StratifiedKFold(n_splits = n_splits, shuffle=True, random_state=0)
 grid_search = GridSearchCV(model, param_grid, scoring='neg_log_loss', n_jobs=-1, cv=kfold, verbose=1)
