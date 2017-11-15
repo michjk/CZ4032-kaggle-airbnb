@@ -88,7 +88,7 @@ def load_direct_preprocessed_data(train_path, test_path):
     print("drop unnecessary")
     # drop unnecessary column
     df_train = df_train.drop([id_name, country_destination_name], axis=1)
-    df_test = df_test.drop([id_name], axis=1)
+    df_test = df_test.drop([id_name, country_destination_name], axis=1)
     print("drop complete")
 
     label_encoder = LabelEncoder()

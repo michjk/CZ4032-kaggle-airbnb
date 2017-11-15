@@ -1,4 +1,3 @@
-#train test 2 attribute
 country_destination_name = 'country_destination'
 country_name = 'country'
 id_name = 'id'

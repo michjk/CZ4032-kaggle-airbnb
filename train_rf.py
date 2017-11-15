@@ -1,7 +1,7 @@
 import numpy as np 
 import pandas as pd
 import os
-from data_manager.data_preprocessor import load_direct_preprocessed_data
+from data_manager.data_preprocessor import *
 from data_manager.data_generator import create_kaggle_submission_csv
 from sklearn.ensemble import RandomForestClassifier
 
@@ -11,7 +11,7 @@ train_path = base_path + "/dataset/train_session_v8.csv"
 test_path = base_path + "/dataset/test_session_v8.csv"
 output_path = base_path + "/dataset/submission_rf.csv"
 
-x_train, y_train, x_test, id_test, label_encoder = load_direct_preprocessed_data(train_path, test_path)
+x_train, y_train, x_test, id_test, label_encoder = load_preprocessed_data(train_path, test_path)
 print("Finish data preprocessing")
 
 #train
