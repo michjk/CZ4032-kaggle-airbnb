@@ -29,7 +29,7 @@ print("Finish data preprocessing")
 model = RandomForestClassifier(n_estimators=1000, min_samples_leaf=10, max_features=20)
 t = time.time()
 kfold = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=0)
-grid_search = GridSearchCV(model, param_grid, scoring='accuracy', n_jobs=-1, cv='kfold', verbose=10)
+grid_search = GridSearchCV(model, param_grid, scoring='accuracy', n_jobs=-1, cv=kfold, verbose=10)
 grid_result = grid_search.fit(x_train, y_train)
 print("Learning time: %.2f"%(time.time()-t))
 
