@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 #dataset path
 base_path = os.path.dirname(os.getcwd())
 train_path_1 = base_path + "/dataset/train_session_v8_ndf_vs_non_ndf.csv"
-train_path_1 = base_path + "/dataset/train_session_v8_exclude_ndf.csv"
+train_path_2 = base_path + "/dataset/train_session_v8_exclude_ndf.csv"
 test_path = base_path + "/dataset/test_session_v8.csv"
 output_path = "/dataset/submission_rf_stacked.csv"
 
