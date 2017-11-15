@@ -12,7 +12,7 @@ base_path = os.path.dirname(os.getcwd())
 train_path_1 = base_path + "/dataset/train_session_v8_ndf_vs_non_ndf.csv"
 train_path_2 = base_path + "/dataset/train_session_v8_exclude_ndf.csv"
 test_path = base_path + "/dataset/test_session_v8.csv"
-output_path = "/dataset/submission_rf_stacked.csv"
+output_path = base_path + "/dataset/submission_rf_stacked.csv"
 
 x_train_1, y_train_1, x_test, id_test, label_encoder_1 = load_preprocessed_data(train_path_1, test_path)
 
