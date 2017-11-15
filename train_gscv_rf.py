@@ -19,7 +19,7 @@ output_path = base_path + "/dataset/submission_gscv_rf.csv"
 n_splits = 5
 n_estimators = [500, 1000, 1200, 1500, 1800]
 min_samples_leaf = [8, 9, 10, 11, 12, 13, 14, 15]
-max_features = [16, 18, 20, 22, 25, 30, 50]
+max_features = [16, 18, 20, 22, 25, 30]
 param_grid = dict(n_estimators=n_estimators, min_samples_leaf=min_samples_leaf, max_features=max_features)
 
 x_train, y_train, x_test, id_test, label_encoder = load_preprocessed_data(train_path, test_path)
