@@ -5,31 +5,24 @@ import time
 
 from data_manager.data_preprocessor import *
 from data_manager.data_generator import create_kaggle_submission_csv
-
 from sklearn.ensemble import RandomForestClassifier
 
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import StratifiedKFold
-from sklearn.model_selection import KFold
-from sklearn.linear_model import LogisticRegression
-
 #dataset path
-dataset_folder_path = os.path.dirname(__file__) + "dataset/"
-train_path_1 = dataset_folder_path + "train_users_2_NDF_vs_non_NDF.csv"
-train_path_2 = dataset_folder_path + "train_users_exclude_NDF.csv"
-test_path = dataset_folder_path + "test_users.csv"
-output_path = "submission.csv"
-cv = 5
+base_path = os.path.dirname(os.getcwd())
+train_path_1 = base_path + "/dataset/train_session_v8_ndf_vs_non_ndf.csv"
+train_path_1 = base_path + "/dataset/train_session_v8_exclude_ndf.csv"
+test_path = base_path + "/dataset/test_session_v8.csv"
+output_path = "/dataset/submission_rf_stacked.csv"
 
 x_train_1, y_train_1, x_test, id_test, label_encoder_1 = load_preprocessed_data(train_path_1, test_path)
 
-model_1 = RandomForestClassifier(n_estimators=500, n_jobs=2, min_samples_leaf=3)
+model_1 = RandomForestClassifier(n_estimators=1000, n_jobs=-1, min_samples_leaf=10, max_features=20)
 model_1.fit(x_train_1, y_train_1)
 prob_1 = model_1.predict_proba(x_test)
 
 x_train_2, y_train_2, x_test, id_test, label_encoder_2 = load_preprocessed_data(train_path_2, test_path)
 
-model_2 = RandomForestClassifier(n_estimators=500, n_jobs=2, min_samples_leaf=3)
+model_2 = RandomForestClassifier(n_estimators=1000, n_jobs=-1, min_samples_leaf=10, max_features=20)
 model_2.fit(x_train_2, y_train_2)
 prob_2 = model_2.predict_proba(x_test)
 
@@ -54,7 +47,7 @@ for i in range(len_test):
     
     prob_3.append(tmp)
 
-print(np.sum(prob_3[0]))
+#print(np.sum(prob_3[0]))
 
 create_kaggle_submission_csv(prob_3, id_test, label_encoder_3, output_path)
 

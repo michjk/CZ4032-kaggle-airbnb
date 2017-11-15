@@ -8,11 +8,11 @@ from data_manager.data_generator import create_kaggle_submission_csv
 from sklearn.linear_model import LogisticRegression
 
 #dataset path
-dataset_folder_path = os.path.dirname(__file__) + "dataset/"
-train_path_1 = dataset_folder_path + "train_users_2_NDF_vs_non_NDF.csv"
-train_path_2 = dataset_folder_path + "train_users_exclude_NDF.csv"
-test_path = dataset_folder_path + "test_users.csv"
-output_path = "submission.csv"
+base_path = os.path.dirname(os.getcwd())
+train_path_1 = base_path + "/dataset/train_session_v8_ndf_vs_non_ndf.csv"
+train_path_1 = base_path + "/dataset/train_session_v8_exclude_ndf.csv"
+test_path = base_path + "/dataset/test_session_v8.csv"
+output_path = "/dataset/submission_lr_stacked.csv"
 
 x_train_1, y_train_1, x_test, id_test, label_encoder_1 = load_preprocessed_data(train_path_1, test_path)
 
@@ -47,7 +47,7 @@ for i in range(len_test):
     
     prob_3.append(tmp)
 
-print(np.sum(prob_3[0]))
+#print(np.sum(prob_3[0]))
 
 create_kaggle_submission_csv(prob_3, id_test, label_encoder_3, output_path)
 
