@@ -8,8 +8,8 @@ from sklearn.model_selection import cross_val_score
 
 #dataset path
 dataset_folder_path = "../dataset/"
-train_path = dataset_folder_path + "train_session.csv"
-test_path = dataset_folder_path + "test_session.csv"
+train_path = dataset_folder_path + "train_session_v8.csv"
+test_path = dataset_folder_path + "test_session_v8.csv"
 output_path = "submission.csv"
 cv = 5
 
