@@ -32,12 +32,16 @@ After that, go to the provided link address and select the jupyter file.
 The dataset provided:
 1. train_users.csv
 2. test_users.csv
-3. train_session_v8.csv : train_users + session
-4. test_session_v8.csv : test_users + session
-5. train_users_2_NDF_vs_non_NDF.csv : train_users with label NDF and non NDF
-6. train_users_exclude_NDF.csv : train_users with label non NDF
-7. train_session_v8_ndf_vs_non_ndf.csv : train_users + session with label NDF and non NDF
-8. train_session_v8_exclude_ndf.csv : train_users + session with label non NDF
+3. session.csv
+4. train_session_v8.csv : train_users + session
+5. test_session_v8.csv : test_users + session
+6. train_users_2_NDF_vs_non_NDF.csv : train_users with label NDF and non NDF
+7. train_users_exclude_NDF.csv : train_users with label non NDF
+8. train_session_v8_ndf_vs_non_ndf.csv : train_users + session with label NDF and non NDF
+9. train_session_v8_exclude_ndf.csv : train_users + session with label non NDF
 
-
+Weka is also used for analyzing data. Used Weka feature:
+1. Explorer to generate instant statistic and plotting for train_users_2, test_users, and session
+2. CFS subset evaluation for train_users_2
+3. Gain ratio evaluation for train_users_2 and session.
 
