@@ -6,6 +6,7 @@ import time
 from data_manager.data_preprocessor import *
 from data_manager.data_generator import create_kaggle_submission_csv
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_score
 
 #dataset path
 base_path = os.path.dirname(os.getcwd())
