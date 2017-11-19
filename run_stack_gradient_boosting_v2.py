@@ -13,15 +13,15 @@ from sklearn.linear_model import LogisticRegression
 
 #dataset path
 dataset_folder_path = "../dataset/"
-train_path_1 = dataset_folder_path + "train_users_2_NDF_vs_non_NDF.csv"
-train_path_2 = dataset_folder_path + "train_users_exclude_NDF.csv"
+train_path_1 = dataset_folder_path + "train_session_ndf_vs_non_ndf.csv"
+train_path_2 = dataset_folder_path + "train_session_exclude_ndf.csv"
 test_path = dataset_folder_path + "test_users.csv"
 output_path = "submission.csv"
 cv = 5
 
 x_train_1, y_train_1, x_test, id_test, label_encoder_1 = load_preprocessed_data(train_path_1, test_path)
 
-model_1 = xgb.XGBClassifier(max_depth=5, learning_rate=0.2, n_estimators=150, objective="binary:logistic", seed=0, min_child_weight=10)
+model_1 = xgb.XGBClassifier(max_depth=5, learning_rate=0.1, n_estimators=200, objective="binary:logistic", seed=0, min_child_weight=2, subsample=1.0, colsample_bytree=0.5)
 
 t = time.time()
 kfold = StratifiedKFold(n_splits = cv, shuffle=True, random_state=0)
@@ -36,7 +36,7 @@ prob_1 = model_1.predict_proba(x_test)
 
 x_train_2, y_train_2, x_test, id_test, label_encoder_2 = load_preprocessed_data(train_path_2, test_path)
 
-model_2 = xgb.XGBClassifier(max_depth=3, learning_rate = 0.1, n_estimators=141, objective="multi:softprob", subsample=1.0, colsample_bytree=0.3, seed=0, min_child_weight=7)
+model_2 = xgb.XGBClassifier(max_depth=3, learning_rate = 0.1, n_estimators=135, objective="multi:softprob", subsample=1.0, colsample_bytree=0.3, seed=0, min_child_weight=6)
 
 t = time.time()
 kfold = StratifiedKFold(n_splits = cv, shuffle=True, random_state=0)
