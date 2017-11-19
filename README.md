@@ -30,7 +30,7 @@ jupyter notebook
 After that, go to the provided link address and select the jupyter file.
 
 The dataset provided:
-1. train_users.csv
+1. train_users_2.csv
 2. test_users.csv
 3. session.csv
 4. train_session_v8.csv : train_users + session
@@ -39,6 +39,12 @@ The dataset provided:
 7. train_users_exclude_NDF.csv : train_users with label non NDF
 8. train_session_v8_ndf_vs_non_ndf.csv : train_users + session with label NDF and non NDF
 9. train_session_v8_exclude_ndf.csv : train_users + session with label non NDF
+
+All dataset should be inside a folder called "dataset" and the folder should be placed outside project folder (1 level with project folder).
+-dataset 
+    |-train_users_2.csv etc
+-airbnb
+    |-run_train_stack_rf.py
 
 Weka is also used for analyzing data. Used Weka feature:
 1. Explorer to generate instant statistic and plotting for train_users_2, test_users, and session
